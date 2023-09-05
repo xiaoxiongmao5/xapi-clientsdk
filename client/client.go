@@ -1,10 +1,12 @@
 package client
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -79,7 +81,130 @@ func GenetateRandomString(length int) string {
 	return string(randomString)
 }
 
-func (c *Client) GetNameByGet(name string) (data interface{}, err error) {
+type GetNameByGetParam struct {
+	Name string `json:"name"`
+}
+
+func (c *Client) GetNameByGet(param string) (statusCode int, contentType string, bodyBytes []byte, err error) {
+	var requestParam GetNameByGetParam
+
+	// 解析 JSON 字符串并填充实例
+	err = json.Unmarshal([]byte(param), &requestParam)
+	if err != nil {
+		fmt.Println("参数解析 JSON 失败:", err)
+		return
+	}
+
+	// 构建查询字符串，将其附加到URL上
+	params := url.Values{}
+	params.Set("name", requestParam.Name)
+
+	// 构建包含查询参数的URL
+	fullURL := GATEWAY_HOST
+	if len(params) > 0 {
+		fullURL += "?" + params.Encode()
+	}
+
+	client := &http.Client{}
+	method := "GET"
+
+	req, err := http.NewRequest(method, fullURL, nil)
+	if err != nil {
+		fmt.Println("GetNameByGet: Failed to create request")
+		return
+	}
+
+	// 构建请求头
+	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
+	req.Header = headers
+
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Println("GetNameByGet: Failed to make request")
+		return
+	}
+	defer response.Body.Close()
+
+	// 读取响应体，将响应体内容原封不动地返回给前端
+	bodyBytes, err = io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("GetNameByPost: Failed to read response, err=", err)
+		return
+	}
+
+	statusCode = response.StatusCode
+	contentType = response.Header.Get("Content-Type")
+
+	return
+}
+
+type GetNameByPostParam struct {
+	Name string `json:"name"`
+}
+
+// 使用POST方法像服务器发送USER对象，并获取服务器返回的结果
+func (c *Client) GetNameByPost(param string) (statusCode int, contentType string, bodyBytes []byte, err error) {
+	var requestParam GetNameByPostParam
+
+	// 解析 JSON 字符串并填充实例
+	err = json.Unmarshal([]byte(param), &requestParam)
+	if err != nil {
+		fmt.Println("参数解析 JSON 失败:", err)
+		return
+	}
+
+	// 构建查询字符串，将其附加到URL上
+	params := url.Values{}
+	params.Set("name", requestParam.Name)
+
+	// 构建包含查询参数的URL
+	fullURL := GATEWAY_HOST
+	if len(params) > 0 {
+		fullURL += "?" + params.Encode()
+	}
+
+	body, err := json.Marshal(requestParam)
+	if err != nil {
+		fmt.Println("GetNameByPost: Failed to Marshal")
+		return
+	}
+
+	client := &http.Client{}
+	method := "POST"
+
+	req, err := http.NewRequest(method, fullURL, bytes.NewReader(body))
+	if err != nil {
+		fmt.Println("GetNameByPost: Failed to create request")
+		return
+	}
+
+	// 构建请求头
+	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
+	req.Header = headers
+	req.Header.Add("Content-Type", "application-json")
+
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Println("GetNameByPost: Failed to make request")
+		return
+	}
+	defer response.Body.Close()
+
+	// 读取响应体，将响应体内容原封不动地返回给前端
+	bodyBytes, err = io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("GetNameByPost: Failed to read response, err=", err)
+		return
+	}
+
+	statusCode = response.StatusCode
+	contentType = response.Header.Get("Content-Type")
+	// todo 判断 contentType 是否和注册接口信息要求一致
+
+	return
+}
+
+func (c *Client) GetNameByGet_old(name string) (data interface{}, err error) {
 
 	// 构建查询字符串，将其附加到URL上
 	params := url.Values{}
