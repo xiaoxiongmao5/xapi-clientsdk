@@ -15,7 +15,8 @@ import (
 )
 
 // 网关地址
-var GATEWAY_HOST = "http://localhost:8002/api/name"
+// var GATEWAY_HOST = "http://localhost:8002/api/name"
+var GATEWAY_HOST = "http://localhost:8080/api/name"
 
 type Client struct {
 	AccessKey string
@@ -204,6 +205,56 @@ func (c *Client) GetNameByPost(param string) (statusCode int, contentType string
 	return
 }
 
+/*
+*
+这种写法的请求方，使用反射，处理返回值逻辑：
+
+	// 如果没有返回值或提取值无效，返回错误
+	if len(result) < 2 {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "No valid data found",
+		})
+		return
+	}
+
+	fmt.Printf("result=%v, len=%v, type=%T \n", result, len(result), result)
+
+	// 提取第一个返回值 对应 返回值 data interface{}
+	firstResult := result[0]
+
+	// 提取第二个返回值 对应 返回值 error
+	bodyErrorValue := result[1]
+	bodyError, ok := bodyErrorValue.Interface().(error)
+	if ok {
+		// 如果存在error
+		fmt.Printf("bodyError=%v type=%T\n", bodyError, bodyError)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "调用接口返回失败",
+		})
+		return
+	}
+
+	// 检查提取的值是否有效
+	if firstResult.IsValid() {
+		// 尝试将其转换为 interface{} 类型
+		data := firstResult.Interface()
+
+		// // 将 data 编码为 JSON 格式
+		// jsonData, err := json.Marshal(data)
+		// if err != nil {
+		// 	c.JSON(http.StatusInternalServerError, gin.H{
+		// 		"error": "Failed to marshal data",
+		// 	})
+		// 	return
+		// }
+
+		// 返回 JSON 响应
+		c.JSON(http.StatusOK, gin.H{
+			"data": data,
+		})
+		return
+	}
+*/
 func (c *Client) GetNameByGet_old(name string) (data interface{}, err error) {
 
 	// 构建查询字符串，将其附加到URL上
