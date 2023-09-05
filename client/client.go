@@ -16,6 +16,7 @@ import (
 
 // 网关地址
 // var GATEWAY_HOST = "http://localhost:8002/api/name"
+
 var GATEWAY_HOST = "http://localhost:8080/api/name"
 
 type Client struct {
@@ -41,7 +42,7 @@ func calculateSignature(accessKey, secretKey, nonce, timestamp, requestBody stri
 }
 
 // 获得请求头
-func getRequestHeaders(accessKey, secretkey, requestBody string) http.Header {
+func getRequestHeaders(accessKey, secretkey, requestBody, gateway_transdata string) http.Header {
 	headers := make(http.Header)
 
 	// 生成 nonce : 一个包含100个随机数字的字符串
@@ -58,6 +59,7 @@ func getRequestHeaders(accessKey, secretkey, requestBody string) http.Header {
 	headers.Set("nonce", nonce)
 	headers.Set("timestamp", timestamp)
 	headers.Set("sign", signature)
+	headers.Set("gateway_transdata", gateway_transdata)
 
 	return headers
 }
@@ -86,7 +88,7 @@ type GetNameByGetParam struct {
 	Name string `json:"name"`
 }
 
-func (c *Client) GetNameByGet(param string) (statusCode int, contentType string, bodyBytes []byte, err error) {
+func (c *Client) GetNameByGet(param, gateway_transdata string) (statusCode int, contentType string, bodyBytes []byte, err error) {
 	var requestParam GetNameByGetParam
 
 	// 解析 JSON 字符串并填充实例
@@ -116,7 +118,7 @@ func (c *Client) GetNameByGet(param string) (statusCode int, contentType string,
 	}
 
 	// 构建请求头
-	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
+	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "", gateway_transdata)
 	req.Header = headers
 
 	response, err := client.Do(req)
@@ -144,7 +146,7 @@ type GetNameByPostParam struct {
 }
 
 // 使用POST方法像服务器发送USER对象，并获取服务器返回的结果
-func (c *Client) GetNameByPost(param string) (statusCode int, contentType string, bodyBytes []byte, err error) {
+func (c *Client) GetNameByPost(param, gateway_transdata string) (statusCode int, contentType string, bodyBytes []byte, err error) {
 	var requestParam GetNameByPostParam
 
 	// 解析 JSON 字符串并填充实例
@@ -180,7 +182,7 @@ func (c *Client) GetNameByPost(param string) (statusCode int, contentType string
 	}
 
 	// 构建请求头
-	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
+	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "", gateway_transdata)
 	req.Header = headers
 	req.Header.Add("Content-Type", "application-json")
 
@@ -255,42 +257,42 @@ func (c *Client) GetNameByPost(param string) (statusCode int, contentType string
 		return
 	}
 */
-func (c *Client) GetNameByGet_old(name string) (data interface{}, err error) {
+// func (c *Client) GetNameByGet_old(name string) (data interface{}, err error) {
 
-	// 构建查询字符串，将其附加到URL上
-	params := url.Values{}
-	params.Set("name", name)
+// 	// 构建查询字符串，将其附加到URL上
+// 	params := url.Values{}
+// 	params.Set("name", name)
 
-	// 构建包含查询参数的URL
-	fullURL := GATEWAY_HOST
-	if len(params) > 0 {
-		fullURL += "?" + params.Encode()
-	}
+// 	// 构建包含查询参数的URL
+// 	fullURL := GATEWAY_HOST
+// 	if len(params) > 0 {
+// 		fullURL += "?" + params.Encode()
+// 	}
 
-	client := &http.Client{}
-	method := "GET"
+// 	client := &http.Client{}
+// 	method := "GET"
 
-	req, err := http.NewRequest(method, fullURL, nil)
-	if err != nil {
-		fmt.Println("GetNameByGet: Failed to create request")
-		return
-	}
+// 	req, err := http.NewRequest(method, fullURL, nil)
+// 	if err != nil {
+// 		fmt.Println("GetNameByGet: Failed to create request")
+// 		return
+// 	}
 
-	// 构建请求头
-	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
-	req.Header = headers
+// 	// 构建请求头
+// 	headers := getRequestHeaders(c.AccessKey, c.SecretKey, "")
+// 	req.Header = headers
 
-	response, err := client.Do(req)
-	if err != nil {
-		fmt.Println("GetNameByGet: Failed to make request")
-		return
-	}
-	defer response.Body.Close()
+// 	response, err := client.Do(req)
+// 	if err != nil {
+// 		fmt.Println("GetNameByGet: Failed to make request")
+// 		return
+// 	}
+// 	defer response.Body.Close()
 
-	// 解析响应
-	if err = json.NewDecoder(response.Body).Decode(&data); err != nil {
-		return
-	}
+// 	// 解析响应
+// 	if err = json.NewDecoder(response.Body).Decode(&data); err != nil {
+// 		return
+// 	}
 
-	return data, nil
-}
+// 	return data, nil
+// }
