@@ -11,7 +11,7 @@ import (
 // 网关地址
 // var GATEWAY_HOST = "http://localhost:8002"
 
-var GATEWAY_HOST = "http://localhost:8080"
+var GATEWAY_HOST = "http://xpi-gateway.com:8080"
 
 func NewClient(accessKey, secretKey string) *Client {
 	return &Client{AccessKey: accessKey, SecretKey: secretKey}
