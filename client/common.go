@@ -29,7 +29,7 @@ func calculateSignature(accessKey, secretKey, nonce, timestamp, requestBody stri
 }
 
 // 获得请求头
-func getRequestHeaders(accessKey, secretkey, requestBody, gateway_transdata string) http.Header {
+func getRequestHeaders(accessKey, secretkey, requestBody, interfaceId string) http.Header {
 	headers := make(http.Header)
 
 	// 生成 nonce : 一个包含100个随机数字的字符串
@@ -46,7 +46,7 @@ func getRequestHeaders(accessKey, secretkey, requestBody, gateway_transdata stri
 	headers.Set("nonce", nonce)
 	headers.Set("timestamp", timestamp)
 	headers.Set("sign", signature)
-	headers.Set("gateway_transdata", gateway_transdata)
+	headers.Set("interfaceId", interfaceId)
 
 	return headers
 }
