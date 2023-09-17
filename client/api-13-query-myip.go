@@ -10,8 +10,10 @@ import (
 // API简介：显示当前设备IP，欢迎对接
 //----------------------------------
 
-func (c *Client) Request_13(param, interfaceId string) ([]byte, error) {
-	juheURL := "https://v.api.aa1.cn/api/myip/"
+func (c *Client) Api_13(param, transinfo3 string) ([]byte, error) {
+	interfaceId := "13"
+	// juheURL := "https://v.api.aa1.cn/api/myip/"
+	juheURL := GATEWAY_HOST
 
 	params := url.Values{}
 

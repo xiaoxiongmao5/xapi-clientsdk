@@ -12,14 +12,16 @@ import (
 // API简介：IP归属地查询，数据来源于淘宝
 //----------------------------------
 
-type Request_10_Param struct {
+type Api_10_Param struct {
 	Ip string `json:"ip"`
 }
 
-func (c *Client) Request_10(param, interfaceId string) ([]byte, error) {
-	juheURL := "https://zj.v.api.aa1.cn/api/ip-taobao/"
+func (c *Client) Api_10(param, transinfo3 string) ([]byte, error) {
+	interfaceId := "10"
+	// juheURL := "https://zj.v.api.aa1.cn/api/ip-taobao/"
+	juheURL := GATEWAY_HOST
 
-	var requestParam Request_10_Param
+	var requestParam Api_10_Param
 	if err := json.Unmarshal([]byte(param), &requestParam); err != nil {
 		LogErr(interfaceId, "参数解析 JSON 失败", err)
 		return nil, err
