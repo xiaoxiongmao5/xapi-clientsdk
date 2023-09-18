@@ -17,7 +17,7 @@ type Api_1_Param struct {
 }
 
 func (c *Client) Api_1(param, transinfo3 string) ([]byte, error) {
-	interfaceId := "10"
+	interfaceId := "1"
 	juheURL := "https://free.wqwlkj.cn/wqwlapi/kd100.php"
 
 	var requestParam Api_1_Param

@@ -17,7 +17,7 @@ type Api_11_Param struct {
 }
 
 func (c *Client) Api_11(param, transinfo3 string) ([]byte, error) {
-	interfaceId := "10"
+	interfaceId := "11"
 	juheURL := "https://zj.v.api.aa1.cn/api/ip-taobao/"
 
 	var requestParam Api_11_Param

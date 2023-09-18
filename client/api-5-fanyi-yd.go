@@ -18,7 +18,8 @@ type Api_5_Param struct {
 	// Type string `json:"type"` //请输入翻译类型（1代表中-英，2代表英-中，3代表中<=>英【自动检测翻译】）
 }
 
-func (c *Client) Api_5(param, interfaceId string) ([]byte, error) {
+func (c *Client) Api_5(param, transinfo3 string) ([]byte, error) {
+	interfaceId := "5"
 	juheURL := "https://v.api.aa1.cn/api/api-fanyi-yd/index.php"
 
 	var requestParam Api_5_Param
