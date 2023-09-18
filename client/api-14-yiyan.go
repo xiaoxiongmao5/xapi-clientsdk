@@ -12,8 +12,7 @@ import (
 
 func (c *Client) Api_14(param, transinfo3 string) ([]byte, error) {
 	interfaceId := "14"
-	// juheURL := "https://v.api.aa1.cn/api/yiyan/index.php"
-	juheURL := GATEWAY_HOST
+	juheURL := "https://v.api.aa1.cn/api/yiyan/index.php"
 
 	params := url.Values{}
 

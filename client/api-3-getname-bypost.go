@@ -14,9 +14,10 @@ type Api_3_Param struct {
 // 使用POST方法像服务器发送USER对象，并获取服务器返回的结果
 func (c *Client) Api_3(param, transinfo3 string) (bodyBytes []byte, err error) {
 	interfaceId := "3"
-	method, _ := "POST", "/api/name"
-	// fullURL := GATEWAY_HOST + apiURL
-	fullURL := GATEWAY_HOST
+	juheURL := ""
+	if c.UseGateway {
+		juheURL = c.GatewayHost
+	}
 	var requestParam Api_3_Param
 
 	// 解析 JSON 字符串并填充实例
@@ -30,7 +31,7 @@ func (c *Client) Api_3(param, transinfo3 string) (bodyBytes []byte, err error) {
 	// params := url.Values{}
 	// params.Set("name", requestParam.Name)
 	// if len(params) > 0 {
-	// 	fullURL += "?" + params.Encode()
+	// 	juheURL += "?" + params.Encode()
 	// }
 
 	body, err := json.Marshal(requestParam)
@@ -41,7 +42,7 @@ func (c *Client) Api_3(param, transinfo3 string) (bodyBytes []byte, err error) {
 
 	client := &http.Client{}
 
-	req, err := http.NewRequest(method, fullURL, bytes.NewReader(body))
+	req, err := http.NewRequest("POST", juheURL, bytes.NewReader(body))
 	if err != nil {
 		LogErr(interfaceId, "Failed to create request", err)
 		return

@@ -8,6 +8,9 @@ import (
 
 // get 网络请求
 func (c *Client) Get(interfaceId string, apiURL string, params url.Values) (rs []byte, err error) {
+	if c.UseGateway {
+		apiURL = c.GatewayHost
+	}
 	var Url *url.URL
 	Url, err = url.Parse(apiURL)
 	if err != nil {
@@ -40,7 +43,7 @@ func (c *Client) Get(interfaceId string, apiURL string, params url.Values) (rs [
 }
 
 // post 网络请求 ,params 是url.Values类型
-func Post(apiURL string, params url.Values) (rs []byte, err error) {
+func Post(interfaceId string, apiURL string, params url.Values) (rs []byte, err error) {
 	resp, err := http.PostForm(apiURL, params)
 	if err != nil {
 		return nil, err

@@ -13,9 +13,10 @@ type Api_2_Param struct {
 
 func (c *Client) Api_2(param, transinfo3 string) (bodyBytes []byte, err error) {
 	interfaceId := "2"
-	method, _ := "GET", "/api/name"
-	// fullURL := GATEWAY_HOST + apiURL
-	fullURL := GATEWAY_HOST
+	juheURL := ""
+	if c.UseGateway {
+		juheURL = c.GatewayHost
+	}
 	var requestParam Api_2_Param
 
 	// 解析 JSON 字符串并填充实例
@@ -30,7 +31,7 @@ func (c *Client) Api_2(param, transinfo3 string) (bodyBytes []byte, err error) {
 
 	params.Set("name", requestParam.Name)
 	var Url *url.URL
-	Url, _ = url.Parse(fullURL)
+	Url, _ = url.Parse(juheURL)
 	Url.RawQuery = params.Encode()
 
 	// body, err := json.Marshal(requestParam)
@@ -41,7 +42,7 @@ func (c *Client) Api_2(param, transinfo3 string) (bodyBytes []byte, err error) {
 
 	client := &http.Client{}
 
-	req, err := http.NewRequest(method, Url.String(), nil)
+	req, err := http.NewRequest("GET", Url.String(), nil)
 	if err != nil {
 		LogErr(interfaceId, "Failed to create request", err)
 		return

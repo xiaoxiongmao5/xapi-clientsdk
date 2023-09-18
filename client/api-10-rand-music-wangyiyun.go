@@ -8,11 +8,10 @@ import (
 // 网易云音乐随机歌曲 调用类
 //----------------------------------
 
-func (c *Client) Api_9(param, transinfo3 string) ([]byte, error) {
-	interfaceId := "9"
+func (c *Client) Api_10(param, transinfo3 string) ([]byte, error) {
+	interfaceId := "10"
 	//请求地址
-	// juheURL := "https://api.uomg.com/api/rand.music"
-	juheURL := GATEWAY_HOST
+	juheURL := "https://api.uomg.com/api/rand.music"
 
 	//初始化参数
 	params := url.Values{}

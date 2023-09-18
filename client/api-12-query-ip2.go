@@ -7,21 +7,21 @@ import (
 )
 
 //----------------------------------
-// https://api.aa1.cn/doc/ip-taobao.html
-// IP归属地淘宝版
-// API简介：IP归属地查询，数据来源于淘宝
+// https://api.aa1.cn/doc/ipquery.html
+// IP归属地查询
+// API简介：ip查询暂不支持域名查询
+// Content-Type: application/json
 //----------------------------------
 
-type Api_10_Param struct {
-	Ip string `json:"ip"`
+type Api_12_Param struct {
+	Ip string `json:"ip"` //IP
 }
 
-func (c *Client) Api_10(param, transinfo3 string) ([]byte, error) {
-	interfaceId := "10"
-	// juheURL := "https://zj.v.api.aa1.cn/api/ip-taobao/"
-	juheURL := GATEWAY_HOST
+func (c *Client) Api_12(param, transinfo3 string) ([]byte, error) {
+	interfaceId := "12"
+	juheURL := "http://www.lpv4.cn:10000/api/ip"
 
-	var requestParam Api_10_Param
+	var requestParam Api_12_Param
 	if err := json.Unmarshal([]byte(param), &requestParam); err != nil {
 		LogErr(interfaceId, "参数解析 JSON 失败", err)
 		return nil, err
